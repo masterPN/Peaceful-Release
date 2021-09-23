@@ -30,5 +30,21 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATannyCharacter::MoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ATannyCharacter::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+
+
+}
+
+void ATannyCharacter::MoveForward(float AxisValue) 
+{
+	AddMovementInput(GetActorForwardVector()*AxisValue);
+}
+
+void ATannyCharacter::MoveRight(float AxisValue) 
+{
+	AddMovementInput(GetActorRightVector()*AxisValue);	
 }
 
