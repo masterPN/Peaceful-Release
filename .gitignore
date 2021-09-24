@@ -2,9 +2,7 @@ Binaries
 DerivedDataCache
 Intermediate
 Saved
-Content/Collections
-Content/Developers
-Content/MetaHumans
+Content/*
 .vscode
 .vs
 *.VC.db
@@ -15,3 +13,6 @@ Content/MetaHumans
 *.suo
 *.xcodeproj
 *.xcworkspace
+
+!Content/*.uasset
+!content/*.umap
