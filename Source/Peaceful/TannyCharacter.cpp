@@ -30,21 +30,46 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Set up movement
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATannyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ATannyCharacter::MoveRight);
+	PlayerInputComponent->BindAction(TEXT("MoveRun"), EInputEvent::IE_Pressed, this, &ATannyCharacter::MoveRun);
+	PlayerInputComponent->BindAction(TEXT("MoveRun"), EInputEvent::IE_Released, this, &ATannyCharacter::MoveWalk);
+
+	// Set up camera
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
-
 
 }
 
 void ATannyCharacter::MoveForward(float AxisValue) 
 {
-	AddMovementInput(GetActorForwardVector()*AxisValue);
+	if(isRun){
+		AxisValue = AxisValue*3;
+		AddMovementInput(GetActorForwardVector()*AxisValue);
+	}else{
+		AddMovementInput(GetActorForwardVector()*AxisValue);
+	}
 }
 
 void ATannyCharacter::MoveRight(float AxisValue) 
 {
-	AddMovementInput(GetActorRightVector()*AxisValue);	
+	if(isRun){
+		AddMovementInput(GetActorRightVector()*AxisValue*3);
+	}else{
+		AddMovementInput(GetActorRightVector()*AxisValue);	
+	}
+}
+
+void ATannyCharacter::MoveRun() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("press shift"));
+	isRun = true;
+}
+
+void ATannyCharacter::MoveWalk() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("release shift"));
+	isRun = false;
 }
 
