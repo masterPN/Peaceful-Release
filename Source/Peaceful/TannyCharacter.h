@@ -27,8 +27,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	float MoveSpeed = 0.2;
+
+	bool isRun = false;
+
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
-
+	void MoveRun();
+	void MoveWalk();
 
 };
