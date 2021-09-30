@@ -45,9 +45,9 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void ATannyCharacter::MoveForward(float AxisValue) 
 {
 	if(isRun){
-		AxisValue = AxisValue*3;
 		AddMovementInput(GetActorForwardVector()*AxisValue);
 	}else{
+		AxisValue = AxisValue/2;
 		AddMovementInput(GetActorForwardVector()*AxisValue);
 	}
 }
@@ -55,8 +55,9 @@ void ATannyCharacter::MoveForward(float AxisValue)
 void ATannyCharacter::MoveRight(float AxisValue) 
 {
 	if(isRun){
-		AddMovementInput(GetActorRightVector()*AxisValue*3);
+		AddMovementInput(GetActorRightVector()*AxisValue);
 	}else{
+		AxisValue = AxisValue/2;
 		AddMovementInput(GetActorRightVector()*AxisValue);	
 	}
 }
