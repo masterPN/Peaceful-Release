@@ -15,4 +15,5 @@ Content/*
 *.xcworkspace
 
 !Content/*.uasset
-!content/*.umap
+!Content/*.umap
+!Content/Characters
