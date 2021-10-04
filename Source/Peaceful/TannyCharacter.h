@@ -36,4 +36,12 @@ private:
 	void MoveRun();
 	void MoveWalk();
 
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 1000;
+
+	bool isInCover = false;
+
+	void CoverObject();
+	void StartCover(FVector HitNormal);
+	void StopCover();
 };
