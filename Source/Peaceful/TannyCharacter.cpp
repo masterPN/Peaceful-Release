@@ -2,6 +2,9 @@
 
 
 #include "TannyCharacter.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/MovementComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ATannyCharacter::ATannyCharacter()
@@ -40,6 +43,9 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 
+	//Set up crouch
+	PlayerInputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CoverObject);
+
 }
 
 void ATannyCharacter::MoveForward(float AxisValue) 
@@ -74,3 +80,48 @@ void ATannyCharacter::MoveWalk()
 	isRun = false;
 }
 
+void ATannyCharacter::CoverObject() 
+{
+	// Get camera view point
+	AController* OwnerController = GetController();
+	if(OwnerController==nullptr){
+		return;
+	}
+
+	FVector Location;
+	FRotator Rotation;
+	OwnerController->GetPlayerViewPoint(Location, Rotation);
+
+	// DrawDebugCamera(GetWorld(), Location, Rotation, 90, 2.0f, FColor::Green, true);
+
+	FVector End = Location+(Rotation.Vector()*MaxRange);
+	FHitResult Hit;
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
+	if(bSuccess){
+		if(isInCover){
+			StopCover();
+		}else{
+			StartCover(Hit.Normal);
+		}
+	}
+}
+
+void ATannyCharacter::StartCover(FVector HitNormal)
+{
+	GetCharacterMovement()->SetPlaneConstraintEnabled(true);
+	GetCharacterMovement()->SetPlaneConstraintNormal(HitNormal);
+	Crouch();
+	bUseControllerRotationYaw = false;
+
+	isInCover = true;
+}
+
+void ATannyCharacter::StopCover()
+{
+	GetCharacterMovement()->SetPlaneConstraintEnabled(false);
+	UnCrouch();
+	bUseControllerRotationYaw = true;
+
+	isInCover = false;
+}
