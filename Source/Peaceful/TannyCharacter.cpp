@@ -44,7 +44,7 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 
 	//Set up crouch
-	PlayerInputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CoverObject);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CrouchInGame);
 
 }
 
@@ -80,7 +80,7 @@ void ATannyCharacter::MoveWalk()
 	isRun = false;
 }
 
-void ATannyCharacter::CoverObject() 
+void ATannyCharacter::CrouchInGame() 
 {
 	// Get camera view point
 	AController* OwnerController = GetController();
@@ -98,16 +98,18 @@ void ATannyCharacter::CoverObject()
 	FHitResult Hit;
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
 	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
-	if(bSuccess){
-		if(isInCover){
-			UE_LOG(LogTemp, Warning, TEXT("stop cover"));
-			StopCover();
-			UE_LOG(LogTemp, Warning, TEXT("Some warning message %s"), (GetCharacterMovement()->IsCrouching() ? TEXT("true") : TEXT("false")));
-		}else{
-			UE_LOG(LogTemp, Warning, TEXT("start cover"));
-			StartCover(Hit.Normal);
-			UE_LOG(LogTemp, Warning, TEXT("Some warning message %s"), (GetCharacterMovement()->IsCrouching() ? TEXT("true") : TEXT("false")));
-		}
+	if(bSuccess && !isInCover){
+		StartCover(Hit.Normal);
+	}else if(isInCover){
+		StopCover();
+	}
+
+	// Crouch in free area
+	if(!bSuccess && !(GetCharacterMovement()->IsCrouching())){
+		Crouch();
+
+	}else if(GetCharacterMovement()->IsCrouching()){
+		UnCrouch();
 	}
 }
 
@@ -115,7 +117,6 @@ void ATannyCharacter::StartCover(FVector HitNormal)
 {
 	GetCharacterMovement()->SetPlaneConstraintEnabled(true);
 	GetCharacterMovement()->SetPlaneConstraintNormal(HitNormal);
-	// GetCharacterMovement()->Crouch();
 	Crouch();
 	bUseControllerRotationYaw = false;
 
@@ -125,7 +126,6 @@ void ATannyCharacter::StartCover(FVector HitNormal)
 void ATannyCharacter::StopCover()
 {
 	GetCharacterMovement()->SetPlaneConstraintEnabled(false);
-	// GetCharacterMovement()->UnCrouch();
 	UnCrouch();
 	bUseControllerRotationYaw = true;
 
