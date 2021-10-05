@@ -41,7 +41,7 @@ private:
 
 	bool isInCover = false;
 
-	void CoverObject();
+	void CrouchInGame();
 	void StartCover(FVector HitNormal);
 	void StopCover();
 };
