@@ -100,9 +100,13 @@ void ATannyCharacter::CoverObject()
 	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
 	if(bSuccess){
 		if(isInCover){
+			UE_LOG(LogTemp, Warning, TEXT("stop cover"));
 			StopCover();
+			UE_LOG(LogTemp, Warning, TEXT("Some warning message %s"), (GetCharacterMovement()->IsCrouching() ? TEXT("true") : TEXT("false")));
 		}else{
+			UE_LOG(LogTemp, Warning, TEXT("start cover"));
 			StartCover(Hit.Normal);
+			UE_LOG(LogTemp, Warning, TEXT("Some warning message %s"), (GetCharacterMovement()->IsCrouching() ? TEXT("true") : TEXT("false")));
 		}
 	}
 }
@@ -111,6 +115,7 @@ void ATannyCharacter::StartCover(FVector HitNormal)
 {
 	GetCharacterMovement()->SetPlaneConstraintEnabled(true);
 	GetCharacterMovement()->SetPlaneConstraintNormal(HitNormal);
+	// GetCharacterMovement()->Crouch();
 	Crouch();
 	bUseControllerRotationYaw = false;
 
@@ -120,6 +125,7 @@ void ATannyCharacter::StartCover(FVector HitNormal)
 void ATannyCharacter::StopCover()
 {
 	GetCharacterMovement()->SetPlaneConstraintEnabled(false);
+	// GetCharacterMovement()->UnCrouch();
 	UnCrouch();
 	bUseControllerRotationYaw = true;
 
