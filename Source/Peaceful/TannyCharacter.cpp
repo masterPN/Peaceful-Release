@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/MovementComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ATannyCharacter::ATannyCharacter()
@@ -60,11 +61,25 @@ void ATannyCharacter::MoveForward(float AxisValue)
 
 void ATannyCharacter::MoveRight(float AxisValue) 
 {
-	if(isRun){
-		AddMovementInput(GetActorRightVector()*AxisValue);
+	bool isCrouch = GetCharacterMovement()->IsCrouching();
+	
+	if(isCrouch){
+		// Cover Trace
+		isRightHit = CoverTrace(true);
+		isLeftHit = CoverTrace(false);
+		
+		UE_LOG(LogTemp, Warning, TEXT("right is %s"), ( isRightHit ? TEXT("true") : TEXT("false") ));
+		UE_LOG(LogTemp, Warning, TEXT("left is %s"), ( isLeftHit ? TEXT("true") : TEXT("false") ));
+
+
+
 	}else{
-		AxisValue = AxisValue/2;
-		AddMovementInput(GetActorRightVector()*AxisValue);	
+		if(isRun){
+			AddMovementInput(GetActorRightVector()*AxisValue);
+		}else{
+			AxisValue = AxisValue/2;
+			AddMovementInput(GetActorRightVector()*AxisValue);	
+		}
 	}
 }
 
@@ -130,4 +145,39 @@ void ATannyCharacter::StopCover()
 	bUseControllerRotationYaw = true;
 
 	isInCover = false;
+}
+
+bool ATannyCharacter::CoverTrace(bool isRightSide)
+{
+	AController* OwnerController = GetController();
+	if(OwnerController==nullptr){
+		return NULL;
+	}
+
+	FVector Location;
+	FRotator Rotation;
+	OwnerController->GetPlayerViewPoint(Location, Rotation);
+
+	FVector distance;
+	if(isRightSide){
+		distance = (GetCharacterMovement()->GetPlaneConstraintNormal())*-1;
+	}else{
+		distance = (GetCharacterMovement()->GetPlaneConstraintNormal());
+	}
+	FRotator distanceRotX = UKismetMathLibrary::MakeRotFromX(distance);
+	FVector distanceRight = UKismetMathLibrary::GetRightVector(distanceRotX);
+
+	FVector Start = Location+(distanceRight*CapsuleSize);
+	FVector End;
+	if(isRightSide){
+		End = Start+(distance*200);
+	}else{
+		End = Start+((distance*-1)*200);
+	}
+
+	FHitResult Hit;
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
+
+	return bSuccess;
 }

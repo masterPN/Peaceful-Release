@@ -27,6 +27,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	// Movement
 	float MoveSpeed = 0.2;
 
 	bool isRun = false;
@@ -36,12 +37,18 @@ private:
 	void MoveRun();
 	void MoveWalk();
 
+	// Cover
 	UPROPERTY(EditAnywhere)
-	float MaxRange = 1000;
+	float MaxRange = 100;
+	UPROPERTY(EditAnywhere)
+	float CapsuleSize = 100;
 
 	bool isInCover = false;
+	bool isRightHit = false;
+	bool isLeftHit = false;
 
 	void CrouchInGame();
 	void StartCover(FVector HitNormal);
 	void StopCover();
+	bool CoverTrace(bool isRightSide);
 };
