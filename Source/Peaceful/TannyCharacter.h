@@ -37,6 +37,9 @@ private:
 	void MoveRun();
 	void MoveWalk();
 
+	// Crouch
+	void CrouchToggle();
+
 	// Cover
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 100;
@@ -47,7 +50,7 @@ private:
 	bool isRightHit = false;
 	bool isLeftHit = false;
 
-	void CrouchInGame();
+	void CoverToggle();
 	void StartCover(FVector HitNormal);
 	void StopCover();
 	bool CoverTrace(bool isRightSide);
