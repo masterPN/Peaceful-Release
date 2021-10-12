@@ -45,7 +45,8 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 
 	//Set up crouch
-	PlayerInputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CrouchInGame);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CrouchToggle);
+	PlayerInputComponent->BindAction(TEXT("Cover"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CoverToggle);
 
 }
 
@@ -95,7 +96,19 @@ void ATannyCharacter::MoveWalk()
 	isRun = false;
 }
 
-void ATannyCharacter::CrouchInGame() 
+void ATannyCharacter::CrouchToggle(){
+	if(!(GetCharacterMovement()->IsCrouching())){
+		Crouch();
+	}else{
+		GetCharacterMovement()->SetPlaneConstraintEnabled(false);
+		UnCrouch();
+		bUseControllerRotationYaw = true;
+
+		isInCover = false;
+	}
+}
+
+void ATannyCharacter::CoverToggle() 
 {
 	// Get camera view point
 	AController* OwnerController = GetController();
@@ -117,14 +130,6 @@ void ATannyCharacter::CrouchInGame()
 		StartCover(Hit.Normal);
 	}else if(isInCover){
 		StopCover();
-	}
-
-	// Crouch in free area
-	if(!bSuccess && !(GetCharacterMovement()->IsCrouching())){
-		Crouch();
-
-	}else if(GetCharacterMovement()->IsCrouching()){
-		UnCrouch();
 	}
 }
 
