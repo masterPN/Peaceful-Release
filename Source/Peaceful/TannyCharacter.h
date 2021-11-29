@@ -54,4 +54,13 @@ private:
 	void StartCover(FVector HitNormal);
 	void StopCover();
 	bool CoverTrace(bool isRightSide);
+
+	// Interaction
+	UPROPERTY(EditAnywhere)
+	float ReachRange = 0.f;
+
+	void InteractionTrigger();
+	FHitResult GetFirstPhysicsBodyInReach() const;
+	FVector GetPlayersReach() const;
+	FVector GetPlayersWorldPos() const;
 };
