@@ -63,4 +63,7 @@ private:
 	FHitResult GetFirstPhysicsBodyInReach() const;
 	FVector GetPlayersReach() const;
 	FVector GetPlayersWorldPos() const;
+
+	// Item to Pass Level
+	bool KeySandbox = false;
 };
