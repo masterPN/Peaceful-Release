@@ -252,9 +252,17 @@ void ATannyCharacter::InteractionTrigger()
 	AActor* ActorHit = HitResult.GetActor();
 
 	if(ActorHit){
-		UE_LOG(LogTemp, Warning, TEXT("%S"), *ActorHit->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorHit->GetName());
+
+		// update item on the character
+		if(ActorHit->GetName()=="KeySandbox"){
+			KeySandbox = true;
+		}
+
 		ActorHit->Destroy();
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("The boolean value is %s"), ( KeySandbox ? TEXT("true") : TEXT("false") ));
 
 
 }
