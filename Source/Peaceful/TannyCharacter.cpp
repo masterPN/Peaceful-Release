@@ -259,7 +259,7 @@ void ATannyCharacter::InteractionTrigger()
 			KeySandbox = true;
 		}
 
-		ActorHit->Destroy();
+		ActorHit->SetActorHiddenInGame(true);
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("The boolean value is %s"), ( KeySandbox ? TEXT("true") : TEXT("false") ));
