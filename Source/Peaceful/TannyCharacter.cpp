@@ -35,7 +35,7 @@ void ATannyCharacter::Tick(float DeltaTime)
 
 	FVector LineTraceEnd = PlayerViewPointLocation+PlayerViewPointRotation.Vector()*ReachRange;
 
-	DrawDebugLine(GetWorld(), PlayerViewPointLocation, LineTraceEnd, FColor(255, 0, 0), false, -1.f, 0, 5.f);
+	// DrawDebugLine(GetWorld(), PlayerViewPointLocation, LineTraceEnd, FColor(255, 0, 0), false, -1.f, 0, 5.f);
 
 }
 
@@ -226,7 +226,7 @@ bool ATannyCharacter::CoverTrace(bool isRightSide)
 	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
 
 	if(bSuccess){
-		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
+		// DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
 	}
 
 	return bSuccess;
