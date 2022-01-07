@@ -70,13 +70,15 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		return;
 	}
 
+	UE_LOG(LogTemp, Error, TEXT("isLock %s"), ( IsLock ? TEXT("true") : TEXT("false") ));
+
 	TArray<AActor*> OverlappingActors;
 	OpenArea->GetOverlappingActors(OUT OverlappingActors);
 
 	for(AActor* Actor : OverlappingActors){
 		if(Actor->GetName() == "BP_TannyCharacter_C_0"){
 			isActorObstruct = true;
-			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E)){
+			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==false){
 				OpenDoor(DeltaTime);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 				isOpening = true;
