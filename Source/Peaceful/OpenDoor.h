@@ -34,6 +34,9 @@ public:
 	// Track if sound has been played.
 	bool OpenDoorSound = false;
 	bool CloseDoorSound = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsLock = false;
 
 private:
 
@@ -42,9 +45,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	FString DoorName;
-
-	UPROPERTY(EditAnywhere)
-	bool IsLock = false;
 
 	UPROPERTY(EditAnywhere)
 	float OpenAngle = 90.f;
