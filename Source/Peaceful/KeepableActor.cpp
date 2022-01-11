@@ -29,9 +29,9 @@ void AKeepableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(IsHidden()){
+	if(IsHidden() && !IsAudioPlayed){
 		UGameplayStatics::PlaySoundAtLocation(this, AudioComponent, GetActorLocation());
+		IsAudioPlayed = true;
 		SetActorTickEnabled(false);
-		Destroy();
 	}
 }
