@@ -32,4 +32,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	USoundBase *AudioComponent;
 
+	bool IsAudioPlayed = false;
+
 };
