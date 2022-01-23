@@ -26,6 +26,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool KeyPrisonDoor = false;
+
 private:
 	// Movement
 	float MoveSpeed = 0.2;
