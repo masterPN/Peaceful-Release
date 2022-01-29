@@ -195,7 +195,7 @@ bool ATannyCharacter::CoverTrace(bool isRightSide)
 {
 	AController* OwnerController = GetController();
 	if(OwnerController==nullptr){
-		return NULL;
+		return false;
 	}
 
 	FVector Location;
