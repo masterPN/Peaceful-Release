@@ -88,9 +88,8 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 				OpenDoor(DeltaTime);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 			}else if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==true){
-				if(DoorLockedAudioComponent){
+				if(DoorLockedAudioComponent && !DoorLockedAudioComponent->IsPlaying()){
 					DoorLockedAudioComponent->Play();
-					
 				}
 			}
 		}
