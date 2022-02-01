@@ -48,6 +48,8 @@ void UOpenDoor::FindAudioComp(){
 			DoorOpenAudioComponent = Component;
 		}else if(Component->GetName()=="CloseDoorAudio"){
 			DoorCloseAudioComponent = Component;
+		}else if(Component->GetName()=="LockedDoorAudio"){
+			DoorLockedAudioComponent = Component;
 		}
 	}
 
@@ -85,6 +87,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 			}else if(isOpening){
 				OpenDoor(DeltaTime);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
+			}else if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==true){
+				if(DoorLockedAudioComponent){
+					DoorLockedAudioComponent->Play();
+					
+				}
 			}
 		}
 	}
