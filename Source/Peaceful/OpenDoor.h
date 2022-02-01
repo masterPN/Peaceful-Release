@@ -38,13 +38,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsLock = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString DoorName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool isOpening = false;
+
 private:
 
 	float InitYaw;
 	float CurrentYaw;
-
-	UPROPERTY(EditAnywhere)
-	FString DoorName;
 
 	UPROPERTY(EditAnywhere)
 	float OpenAngle = 90.f;
@@ -61,8 +64,6 @@ private:
 	float DoorCloseSpeed = 2.f;
 
 	bool isActorObstruct = false;
-
-	bool isOpening = false;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* OpenArea = nullptr;
