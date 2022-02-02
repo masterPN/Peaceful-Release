@@ -79,7 +79,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	OpenArea->GetOverlappingActors(OUT OverlappingActors);
 
 	for(AActor* Actor : OverlappingActors){
-		if(Actor->GetName() == "BP_TannyCharacter_C_0"){
+		if(Actor->GetName() == GetWorld()->GetFirstPlayerController()->GetPawn()->GetName()){
 			isActorObstruct = true;
 			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==false){
 				OpenDoor(DeltaTime);
