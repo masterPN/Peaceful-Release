@@ -59,6 +59,9 @@ void UOpenDoor::FindAudioComp(){
 	if(!DoorCloseAudioComponent){
 		UE_LOG(LogTemp, Error, TEXT("%s Missing door close audio component"), *GetOwner()->GetName());
 	}
+	if(!DoorLockedAudioComponent){
+		UE_LOG(LogTemp, Error, TEXT("%s Missing door locked audio component"), *GetOwner()->GetName());
+	}
 }
 
 // Called every frame
@@ -71,8 +74,6 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if(!OpenArea){
 		return;
 	}
-
-	UE_LOG(LogTemp, Error, TEXT("isLock %s"), ( IsLock ? TEXT("true") : TEXT("false") ));
 
 	TArray<AActor*> OverlappingActors;
 	OpenArea->GetOverlappingActors(OUT OverlappingActors);
