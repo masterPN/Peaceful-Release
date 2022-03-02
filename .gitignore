@@ -17,3 +17,4 @@ Content/*
 !Content/*.uasset
 !Content/*.umap
 !Content/Characters
+!Content/Maps
