@@ -3,7 +3,9 @@
 
 #include "OpenDoor.h"
 #include "Components/AudioComponent.h"
+#include "Engine/World.h"
 #include "GameFramework/InputSettings.h"
+#include "GameFramework/PlayerController.h"
 
 
 // Sets default values for this component's properties
