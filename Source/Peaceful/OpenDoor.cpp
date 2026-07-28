@@ -50,6 +50,8 @@ void UOpenDoor::FindAudioComp(){
 			DoorCloseAudioComponent = Component;
 		}else if(Component->GetName()=="LockedDoorAudio"){
 			DoorLockedAudioComponent = Component;
+		}else if(Component->GetName()=="DoorLockedTannyAudio"){
+			DoorLockedTannyAudioComponent = Component;
 		}
 	}
 
@@ -61,6 +63,9 @@ void UOpenDoor::FindAudioComp(){
 	}
 	if(!DoorLockedAudioComponent){
 		UE_LOG(LogTemp, Error, TEXT("%s Missing door locked audio component"), *GetOwner()->GetName());
+	}
+	if(!DoorLockedTannyAudioComponent){
+		UE_LOG(LogTemp, Error, TEXT("%s Missing door locked Tanny audio component"), *GetOwner()->GetName());
 	}
 }
 
@@ -89,8 +94,9 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 				OpenDoor(DeltaTime);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 			}else if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==true){
-				if(DoorLockedAudioComponent && !DoorLockedAudioComponent->IsPlaying()){
+				if(DoorLockedAudioComponent && !DoorLockedAudioComponent->IsPlaying() && !DoorLockedTannyAudioComponent->IsPlaying()){
 					DoorLockedAudioComponent->Play();
+					DoorLockedTannyAudioComponent->Play();
 				}
 			}
 		}
