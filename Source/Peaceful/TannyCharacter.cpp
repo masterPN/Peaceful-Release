@@ -2,6 +2,7 @@
 
 
 #include "TannyCharacter.h"
+#include "Components/InputComponent.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/MovementComponent.h"
