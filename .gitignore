@@ -18,3 +18,6 @@ Content/*
 !Content/*.umap
 !Content/Characters
 !Content/Maps
+!Content/AI
+!Content/Fonts
+!Content/Sounds
