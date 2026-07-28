@@ -75,5 +75,8 @@ private:
 	UAudioComponent* DoorCloseAudioComponent = nullptr;
 
 	UPROPERTY()
-	UAudioComponent* DoorLockedAudioComponent = nullptr;		
+	UAudioComponent* DoorLockedAudioComponent = nullptr;
+
+	UPROPERTY()
+	UAudioComponent* DoorLockedTannyAudioComponent = nullptr;	
 };
