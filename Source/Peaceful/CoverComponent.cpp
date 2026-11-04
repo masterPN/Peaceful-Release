@@ -14,16 +14,6 @@ UCoverComponent::UCoverComponent()
 }
 
 
-// Called when the game starts
-void UCoverComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
 // Called every frame
 void UCoverComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
