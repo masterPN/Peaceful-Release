@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TannyCharacter.generated.h"
 
+class UCoverComponent;
+
 UCLASS()
 class PEACEFUL_API ATannyCharacter : public ACharacter
 {
@@ -28,6 +30,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool KeyPrisonDoor = false;
+
+	UPROPERTY(VisibleAnywhere)
+	UCoverComponent *CoverComponent;
 
 private:
 	// Movement
@@ -53,9 +58,6 @@ private:
 	bool isRightHit = false;
 	bool isLeftHit = false;
 
-	void CoverToggle();
-	void StartCover(FVector HitNormal);
-	void StopCover();
 	bool CoverTrace(bool isRightSide);
 
 	// Interaction

@@ -3,10 +3,12 @@
 
 #include "TannyCharacter.h"
 #include "Components/InputComponent.h"
+#include "CoverComponent.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/MovementComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "HAL/Platform.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -38,6 +40,8 @@ void ATannyCharacter::Tick(float DeltaTime)
 
 	// DrawDebugLine(GetWorld(), PlayerViewPointLocation, LineTraceEnd, FColor(255, 0, 0), false, -1.f, 0, 5.f);
 
+	CoverComponent = CreateDefaultSubobject<UCoverComponent>(TEXT("CoverComponent"));
+
 }
 
 // Called to bind functionality to input
@@ -57,7 +61,7 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	// Set up crouch
 	PlayerInputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CrouchToggle);
-	PlayerInputComponent->BindAction(TEXT("Cover"), EInputEvent::IE_Pressed, this, &ATannyCharacter::CoverToggle);
+	PlayerInputComponent->BindAction(TEXT("Cover"), EInputEvent::IE_Pressed, CoverComponent, &UCoverComponent::TryToggleCover);
 
 	// Set up interaction
 	PlayerInputComponent->BindAction(TEXT("Interaction"), EInputEvent::IE_Pressed, this, &ATannyCharacter::InteractionTrigger);
@@ -146,50 +150,6 @@ void ATannyCharacter::CrouchToggle(){
 
 		isInCover = false;
 	}
-}
-
-void ATannyCharacter::CoverToggle() 
-{
-	// Get camera view point
-	AController* OwnerController = GetController();
-	if(OwnerController==nullptr){
-		return;
-	}
-
-	FVector Location;
-	FRotator Rotation;
-	OwnerController->GetPlayerViewPoint(Location, Rotation);
-
-	// DrawDebugCamera(GetWorld(), Location, Rotation, 90, 2.0f, FColor::Green, true);
-
-	FVector End = Location+(Rotation.Vector()*MaxRange);
-	FHitResult Hit;
-	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
-	if(bSuccess && !isInCover){
-		StartCover(Hit.Normal);
-	}else if(isInCover){
-		StopCover();
-	}
-}
-
-void ATannyCharacter::StartCover(FVector HitNormal)
-{
-	GetCharacterMovement()->SetPlaneConstraintEnabled(true);
-	GetCharacterMovement()->SetPlaneConstraintNormal(HitNormal);
-	Crouch();
-	bUseControllerRotationYaw = false;
-
-	isInCover = true;
-}
-
-void ATannyCharacter::StopCover()
-{
-	GetCharacterMovement()->SetPlaneConstraintEnabled(false);
-	UnCrouch();
-	bUseControllerRotationYaw = true;
-
-	isInCover = false;
 }
 
 bool ATannyCharacter::CoverTrace(bool isRightSide)
