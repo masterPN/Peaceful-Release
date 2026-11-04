@@ -48,9 +48,6 @@ private:
 	// Crouch
 	void CrouchToggle();
 
-	// Cover
-	UPROPERTY(EditAnywhere)
-	float MaxRange = 100;
 	UPROPERTY(EditAnywhere)
 	float CapsuleSize = 100;
 
