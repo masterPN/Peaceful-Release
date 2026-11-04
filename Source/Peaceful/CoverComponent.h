@@ -20,13 +20,20 @@ public:
 
 	void TryToggleCover();
 
+	bool ApplyCoverMovement(float AxisValue);
+
 private:
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 100.f;
+	UPROPERTY(EditAnywhere)
+	float CapsuleSize = 100.f;
 
 	bool bInCover = false;
+	bool bRightHit = false;
+	bool bLeftHit = false;
 
 	void StartCover(const FVector& HitNormal);
 	void StopCover();
+	bool CoverTrace(bool bIsRightSide) const;
 		
 };

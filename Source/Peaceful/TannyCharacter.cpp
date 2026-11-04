@@ -79,52 +79,15 @@ void ATannyCharacter::MoveForward(float AxisValue)
 
 void ATannyCharacter::MoveRight(float AxisValue) 
 {
-	bool isCrouch = GetCharacterMovement()->IsCrouching();
-	
-	if(isInCover){
-		// Cover Trace
-		isRightHit = CoverTrace(true);
-		isLeftHit = CoverTrace(false);
-		
-		UE_LOG(LogTemp, Warning, TEXT("right is %s"), ( isRightHit ? TEXT("true") : TEXT("false") ));
-		UE_LOG(LogTemp, Warning, TEXT("left is %s"), ( isLeftHit ? TEXT("true") : TEXT("false") ));
+	if(CoverComponent->ApplyCoverMovement(AxisValue)){
+		return;
+	}
 
-		if(isRightHit && isLeftHit){
-			FVector Start = GetActorLocation();
-			FVector distance = UKismetMathLibrary::Multiply_VectorFloat(GetCharacterMovement()->GetPlaneConstraintNormal(), -200);
-			FVector End = Start + distance;
-
-			FHitResult Hit;
-			FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-			bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
-
-			if(bSuccess){
-				GetCharacterMovement()->SetPlaneConstraintNormal(Hit.Normal);
-
-				FRotator Rotation = GetControlRotation();
-				FRotator RotationYaw = UKismetMathLibrary::MakeRotator(0, 0, Rotation.Yaw);
-				FVector RightVector = UKismetMathLibrary::GetRightVector(RotationYaw);
-				AddMovementInput(RightVector*AxisValue);
-			}
-		}else{
-			FRotator Rotation = GetControlRotation();
-			FRotator RotationYaw = UKismetMathLibrary::MakeRotator(0, 0, Rotation.Yaw);
-			FVector RightVector = UKismetMathLibrary::GetRightVector(RotationYaw);
-
-			if(AxisValue==1.0f){
-				if(isRightHit && AxisValue!=0){
-					AddMovementInput(RightVector*AxisValue);
-				}
-			}
-
-		}
+	if(isRun){
+		AddMovementInput(GetActorRightVector()*AxisValue);
 	}else{
-		if(isRun){
-			AddMovementInput(GetActorRightVector()*AxisValue);
-		}else{
-			AxisValue = AxisValue/2;
-			AddMovementInput(GetActorRightVector()*AxisValue);	
-		}
+		AxisValue = AxisValue/2;
+		AddMovementInput(GetActorRightVector()*AxisValue);	
 	}
 }
 
@@ -150,47 +113,6 @@ void ATannyCharacter::CrouchToggle(){
 
 		isInCover = false;
 	}
-}
-
-bool ATannyCharacter::CoverTrace(bool isRightSide)
-{
-	AController* OwnerController = GetController();
-	if(OwnerController==nullptr){
-		return NULL;
-	}
-
-	FVector Location;
-	FRotator Rotation;
-	// OwnerController->GetPlayerViewPoint(Location, Rotation);
-	Location = GetActorLocation();
-	Rotation = GetActorRotation();
-
-	FVector distance;
-	if(isRightSide){
-		distance = UKismetMathLibrary::Multiply_VectorFloat(GetCharacterMovement()->GetPlaneConstraintNormal(), -1);
-	}else{
-		distance = (GetCharacterMovement()->GetPlaneConstraintNormal());
-	}
-	FRotator distanceRotX = UKismetMathLibrary::MakeRotFromX(distance);
-	FVector distanceRight = UKismetMathLibrary::GetRightVector(distanceRotX);
-
-	FVector Start = UKismetMathLibrary::Add_VectorVector(Location, UKismetMathLibrary::Multiply_VectorFloat(distanceRight, CapsuleSize));
-	FVector End;
-	if(isRightSide){
-		End = UKismetMathLibrary::Add_VectorVector(Start, UKismetMathLibrary::Multiply_VectorFloat(distance, 200));
-	}else{
-		End = UKismetMathLibrary::Add_VectorVector(Start, UKismetMathLibrary::Multiply_VectorFloat(distance, -200));
-	}
-
-	FHitResult Hit;
-	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, TraceParams);
-
-	if(bSuccess){
-		// DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
-	}
-
-	return bSuccess;
 }
 
 // Interaction

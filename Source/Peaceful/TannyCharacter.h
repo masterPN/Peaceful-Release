@@ -48,14 +48,7 @@ private:
 	// Crouch
 	void CrouchToggle();
 
-	UPROPERTY(EditAnywhere)
-	float CapsuleSize = 100;
-
 	bool isInCover = false;
-	bool isRightHit = false;
-	bool isLeftHit = false;
-
-	bool CoverTrace(bool isRightSide);
 
 	// Interaction
 	UPROPERTY(EditAnywhere)
