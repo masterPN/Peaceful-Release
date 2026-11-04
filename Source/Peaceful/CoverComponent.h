@@ -18,5 +18,15 @@ public:
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void TryToggleCover();
+
+private:
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 100.f;
+
+	bool bInCover = false;
+
+	void StartCover(const FVector& HitNormal);
+	void StopCover();
 		
 };
