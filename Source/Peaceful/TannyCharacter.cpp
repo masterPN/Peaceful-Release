@@ -9,6 +9,7 @@
 #include "GameFramework/MovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "HAL/Platform.h"
+#include "InteractionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -18,7 +19,8 @@ ATannyCharacter::ATannyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CoverComponent = CreateDefaultSubobject<UCoverComponent>(TEXT("CoverComponent"));
-	
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
+
 }
 
 // Called when the game starts or when spawned
@@ -63,7 +65,7 @@ void ATannyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Cover"), EInputEvent::IE_Pressed, CoverComponent, &UCoverComponent::TryToggleCover);
 
 	// Set up interaction
-	PlayerInputComponent->BindAction(TEXT("Interaction"), EInputEvent::IE_Pressed, this, &ATannyCharacter::InteractionTrigger);
+	PlayerInputComponent->BindAction(TEXT("Interaction"), EInputEvent::IE_Pressed, InteractionComponent, &UInteractionComponent::TriggerInteraction);
 }
 
 void ATannyCharacter::MoveForward(float AxisValue) 
@@ -112,41 +114,6 @@ void ATannyCharacter::CrouchToggle(){
 
 		isInCover = false;
 	}
-}
-
-// Interaction
-
-void ATannyCharacter::InteractionTrigger()
-{
-	// AController* OwnerController = GetController();
-	// if(OwnerController==nullptr){
-	// 	return;
-	// }
-
-	// FVector Location;
-	// FRotator Rotation;
-	// Location = GetActorLocation();
-	// Rotation = GetActorRotation();
-
-
-	FHitResult HitResult = GetFirstPhysicsBodyInReach();
-	UPrimitiveComponent* ComponentToInteract = HitResult.GetComponent();
-	AActor* ActorHit = HitResult.GetActor();
-
-	if(ActorHit){
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorHit->GetName());
-
-		// update item on the character
-		if(ActorHit->GetName()=="KeySandbox"){
-			KeySandbox = true;
-		}
-
-		ActorHit->SetActorHiddenInGame(true);
-	}
-
-	UE_LOG(LogTemp, Warning, TEXT("The boolean value is %s"), ( KeySandbox ? TEXT("true") : TEXT("false") ));
-
-
 }
 
 FHitResult ATannyCharacter::GetFirstPhysicsBodyInReach() const
