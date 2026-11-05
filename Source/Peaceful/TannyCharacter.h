@@ -54,8 +54,4 @@ private:
 
 	// Crouch
 	void CrouchToggle();
-
-	// Interaction
-	UPROPERTY(EditAnywhere)
-	float ReachRange = 0.f;
 };
