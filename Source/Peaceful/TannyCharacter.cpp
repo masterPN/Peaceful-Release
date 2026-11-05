@@ -101,13 +101,11 @@ void ATannyCharacter::MoveWalk()
 }
 
 void ATannyCharacter::CrouchToggle(){
-	if(!(GetCharacterMovement()->IsCrouching())){
-		Crouch();
-	}else{
+	if(GetCharacterMovement()->IsCrouching()){
 		GetCharacterMovement()->SetPlaneConstraintEnabled(false);
 		UnCrouch();
 		bUseControllerRotationYaw = true;
-
-		isInCover = false;
+	}else{
+		Crouch();
 	}
 }

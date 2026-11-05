@@ -58,8 +58,6 @@ private:
 	// Crouch
 	void CrouchToggle();
 
-	bool isInCover = false;
-
 	// Interaction
 	UPROPERTY(EditAnywhere)
 	float ReachRange = 0.f;
