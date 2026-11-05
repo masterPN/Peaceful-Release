@@ -112,22 +112,6 @@ void ATannyCharacter::CrouchToggle(){
 	}
 }
 
-FHitResult ATannyCharacter::GetFirstPhysicsBodyInReach() const
-{
-	FHitResult Hit;
-	// Ray-cast out to a certain distance (Reach)
-	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT Hit,
-		GetPlayersWorldPos(),
-		GetPlayersReach(),
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_GameTraceChannel2),
-		TraceParams
-	);
-	return Hit;
-}
-
 FVector ATannyCharacter::GetPlayersWorldPos() const
 {
 	FVector PlayerViewPointLocation;
