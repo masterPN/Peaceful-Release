@@ -2,21 +2,28 @@
 
 
 #include "EnermyAIController.h"
+#include "CoreGlobals.h"
+#include "HAL/Platform.h"
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Logging/LogMacros.h"
+#include "Logging/LogVerbosity.h"
 
 
 void AEnermyAIController::BeginPlay()
 {
     Super::BeginPlay();
 
-    if(AIBehavior != nullptr){
-        RunBehaviorTree(AIBehavior);
-
-        APawn *PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-        GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-        GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+    if(AIBehavior == nullptr){
+        UE_LOG(LogTemp, Error, TEXT("%s has no AIBehavior"), *GetName());
+        return;
     }
+
+    RunBehaviorTree(AIBehavior);
+
+    APawn *PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+    GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
     
 }
 
