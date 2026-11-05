@@ -85,11 +85,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	for(AActor* Actor : OverlappingActors){
 		if(Actor->GetName() == "BP_TannyCharacter_C_0"){
 			isActorObstruct = true;
-			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==false){
+			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==false && !bIsAnimating){
 				StartAnimating(true);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 				isOpening = true;
-			}else if(isOpening){
+			}else if(isOpening && !bIsAnimating){
 				StartAnimating(true);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 			}
