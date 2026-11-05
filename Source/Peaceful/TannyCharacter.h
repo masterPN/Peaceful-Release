@@ -48,9 +48,6 @@ public:
 	bool HasKey(FName KeyId) const { return KeyInventory.Contains(KeyId); }
 
 private:
-	// Movement
-	float MoveSpeed = 0.2;
-
 	bool isRun = false;
 
 	void MoveForward(float AxisValue);
@@ -66,9 +63,4 @@ private:
 	// Interaction
 	UPROPERTY(EditAnywhere)
 	float ReachRange = 0.f;
-
-	FVector GetPlayersReach() const;
-
-	// Item to Pass Level
-	bool KeySandbox = false;
 };
