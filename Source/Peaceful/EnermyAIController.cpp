@@ -31,12 +31,16 @@ void AEnermyAIController::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 
+    UBlackboardComponent *BB = GetBlackboardComponent();
+    if (!BB) {
+        return;
+    }
+
     APawn *PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     if(LineOfSightTo(PlayerPawn)){
-        GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-        GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
-
+        BB->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+        BB->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
     }else{
-        GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+        BB->ClearValue(TEXT("PlayerLocation"));
     }
 }
