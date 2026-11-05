@@ -8,6 +8,8 @@
 #include "Engine/TriggerVolume.h"
 #include "OpenDoor.generated.h"
 
+class ATannyCharacter;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PEACEFUL_API UOpenDoor : public UActorComponent
 {
@@ -31,12 +33,17 @@ public:
 	void FindPressurePlate();
 	void FindAudioComp();
 
+	void Interact(ATannyCharacter *Interactor);
+
 	// Track if sound has been played.
 	bool OpenDoorSound = false;
 	bool CloseDoorSound = true;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsLock = false;
+
+	UPROPERTY(EditAnywhere)
+	FName RequiredKeyId;
 
 private:
 
@@ -64,6 +71,10 @@ private:
 
 	bool isOpening = false;
 
+	bool bIsAnimating = false;
+
+	bool bOpenTarget = false;
+
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* OpenArea = nullptr;
 
@@ -72,5 +83,7 @@ private:
 
 	UPROPERTY()
 	UAudioComponent* DoorCloseAudioComponent = nullptr;
+
+	void StartAnimating(bool bOpen);
 		
 };

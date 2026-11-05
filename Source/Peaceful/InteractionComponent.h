@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/HitResult.h"
 #include "InteractionComponent.generated.h"
 
 
@@ -23,6 +24,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	void TriggerInteraction();
+
+private:
+	UPROPERTY(EditAnywhere)
+	float ReachRange = 200.f;
+
+	FHitResult GetFirstBodyInReach() const;
+	FVector GetReachStart() const;
+	FVector GetReachEnd() const;
 
 		
 };

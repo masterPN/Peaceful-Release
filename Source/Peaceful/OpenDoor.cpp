@@ -6,6 +6,7 @@
 #include "Engine/World.h"
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/PlayerController.h"
+#include "TannyCharacter.h"
 
 
 // Sets default values for this component's properties
@@ -129,5 +130,36 @@ void UOpenDoor::CloseDoor(float DeltaTime){
 	if(!CloseDoorSound){
 		DoorCloseAudioComponent->Play();
 		CloseDoorSound = true;
+	}
+}
+
+void UOpenDoor::Interact(ATannyCharacter *Interactor)
+{
+	const bool bUnlocked = !IsLock || (Interactor && Interactor->HasKey(RequiredKeyId));
+
+	if (bUnlocked && !bIsAnimating) {
+		StartAnimating(true);
+	}
+}
+
+void UOpenDoor::StartAnimating(bool bOpen)
+{
+	bOpenTarget = bOpen;
+	bIsAnimating = true;
+	DoorLastOpened = GetWorld()->GetTimeSeconds();
+	SetComponentTickEnabled(true);
+
+	if (bOpen) {
+		CloseDoorSound = false;
+		if (DoorOpenAudioComponent && !OpenDoorSound) {
+			DoorOpenAudioComponent->Play();
+			OpenDoorSound = true;
+		}
+	} else {
+		OpenDoorSound = false;
+		if (DoorCloseAudioComponent && !CloseDoorSound) {
+			DoorCloseAudioComponent->Play();
+			CloseDoorSound = true;
+		}
 	}
 }
