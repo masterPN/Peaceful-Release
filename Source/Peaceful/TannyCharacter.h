@@ -67,7 +67,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ReachRange = 0.f;
 
-	FHitResult GetFirstPhysicsBodyInReach() const;
 	FVector GetPlayersReach() const;
 	FVector GetPlayersWorldPos() const;
 
