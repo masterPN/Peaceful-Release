@@ -92,13 +92,11 @@ void ATannyCharacter::MoveRight(float AxisValue)
 
 void ATannyCharacter::MoveRun() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("press shift"));
 	isRun = true;
 }
 
 void ATannyCharacter::MoveWalk() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("release shift"));
 	isRun = false;
 }
 
