@@ -111,29 +111,3 @@ void ATannyCharacter::CrouchToggle(){
 		isInCover = false;
 	}
 }
-
-FVector ATannyCharacter::GetPlayersWorldPos() const
-{
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotation
-	);
-
-	return PlayerViewPointLocation;
-}
-
-FVector ATannyCharacter::GetPlayersReach() const
-{
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotation
-	);
-
-	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * ReachRange;
-}

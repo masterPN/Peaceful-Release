@@ -68,7 +68,6 @@ private:
 	float ReachRange = 0.f;
 
 	FVector GetPlayersReach() const;
-	FVector GetPlayersWorldPos() const;
 
 	// Item to Pass Level
 	bool KeySandbox = false;
