@@ -17,6 +17,8 @@ ATannyCharacter::ATannyCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CoverComponent = CreateDefaultSubobject<UCoverComponent>(TEXT("CoverComponent"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -39,9 +41,6 @@ void ATannyCharacter::Tick(float DeltaTime)
 	FVector LineTraceEnd = PlayerViewPointLocation+PlayerViewPointRotation.Vector()*ReachRange;
 
 	// DrawDebugLine(GetWorld(), PlayerViewPointLocation, LineTraceEnd, FColor(255, 0, 0), false, -1.f, 0, 5.f);
-
-	CoverComponent = CreateDefaultSubobject<UCoverComponent>(TEXT("CoverComponent"));
-
 }
 
 // Called to bind functionality to input
