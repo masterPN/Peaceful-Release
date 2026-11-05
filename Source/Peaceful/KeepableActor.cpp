@@ -24,14 +24,11 @@ void AKeepableActor::BeginPlay()
 	
 }
 
-// Called every frame
-void AKeepableActor::Tick(float DeltaTime)
+void AKeepableActor::OnPickedUp()
 {
-	Super::Tick(DeltaTime);
-
-	if(IsHidden() && !IsAudioPlayed){
-		UGameplayStatics::PlaySoundAtLocation(this, AudioComponent, GetActorLocation());
-		IsAudioPlayed = true;
-		SetActorTickEnabled(false);
+	if (!AudioComponent) {
+		return;
 	}
+
+	UGameplayStatics::PlaySoundAtLocation(this, AudioComponent, GetActorLocation());
 }

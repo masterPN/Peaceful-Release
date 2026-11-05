@@ -34,6 +34,15 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCoverComponent *CoverComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<FName, int32> KeyInventory;
+
+	UFUNCTION(BlueprintCallable)
+	void AddKey(FName KeyId) { KeyInventory.FindOrAdd(KeyId)++; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool HasKey(FName KeyId) const { return KeyInventory.Contains(KeyId); }
+
 private:
 	// Movement
 	float MoveSpeed = 0.2;
