@@ -84,5 +84,7 @@ private:
 	void StartAnimating(bool bOpen);
 
 	void StepAnimation(float DeltaTime);
+
+	bool IsInteractorOverlapping() const;
 		
 };

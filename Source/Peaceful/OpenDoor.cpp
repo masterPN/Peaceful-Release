@@ -3,12 +3,15 @@
 
 #include "OpenDoor.h"
 #include "Components/AudioComponent.h"
+#include "Containers/Array.h"
 #include "Engine/World.h"
+#include "GameFramework/Actor.h"
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/PlayerController.h"
 #include "Math/MathFwd.h"
 #include "Math/UnrealMathUtility.h"
 #include "TannyCharacter.h"
+#include "Templates/Casts.h"
 
 
 // Sets default values for this component's properties
@@ -71,36 +74,9 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		StepAnimation(DeltaTime);
 	}
 
-	isActorObstruct = false;
-
-	if(!OpenArea){
-		return;
-	}
-
-	UE_LOG(LogTemp, Error, TEXT("isLock %s"), ( IsLock ? TEXT("true") : TEXT("false") ));
-
-	TArray<AActor*> OverlappingActors;
-	OpenArea->GetOverlappingActors(OUT OverlappingActors);
-
-	for(AActor* Actor : OverlappingActors){
-		if(Actor->GetName() == "BP_TannyCharacter_C_0"){
-			isActorObstruct = true;
-			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==false && !bIsAnimating){
-				StartAnimating(true);
-				DoorLastOpened = GetWorld()->GetTimeSeconds();
-				isOpening = true;
-			}else if(isOpening && !bIsAnimating){
-				StartAnimating(true);
-				DoorLastOpened = GetWorld()->GetTimeSeconds();
-			}
-		}
-	}
-
-	// no actor obstruct door, close it
-	if(!isActorObstruct){
-		if(GetWorld()->GetTimeSeconds()-DoorLastOpened>DoorCloseDelay){
+	if (bOpenTarget && !bIsAnimating && !IsInteractorOverlapping()) {
+		if ((GetWorld()->GetTimeSeconds()-DoorLastOpened)>DoorCloseDelay) {
 			StartAnimating(false);
-			isOpening = false;
 		}
 	}
 }
@@ -152,4 +128,21 @@ void UOpenDoor::StepAnimation(float DeltaTime)
 			SetComponentTickEnabled(false);
 		}
 	}
+}
+
+bool UOpenDoor::IsInteractorOverlapping() const
+{
+	if (!OpenArea) {
+		return false;
+	}
+
+	TArray<AActor*> Overlapping;
+	OpenArea->GetOverlappingActors(OUT Overlapping);
+	for (AActor *Actor : Overlapping) {
+		if (Cast<ATannyCharacter>(Actor)) {
+			return true;
+		}
+	}
+
+	return false;
 }
