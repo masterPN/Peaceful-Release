@@ -41,12 +41,10 @@ void UOpenDoor::FindPressurePlate(){
 }
 
 void UOpenDoor::FindAudioComp(){
-	// AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
+	TArray<UAudioComponent*> AudioComponents;
+	GetOwner()->GetComponents<UAudioComponent>(OUT AudioComponents);
 
-	TArray<UAudioComponent*> AudioComponent;
-	GetOwner()->GetComponents<UAudioComponent>(OUT AudioComponent);
-
-	for(UAudioComponent* Component : AudioComponent){
+	for(UAudioComponent* Component : AudioComponents){
 		if(Component->GetName()=="OpenDoorAudio"){
 			DoorOpenAudioComponent = Component;
 		}else if(Component->GetName()=="CloseDoorAudio"){
