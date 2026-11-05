@@ -23,8 +23,13 @@ void AEnermyAIController::BeginPlay()
 
     PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-    GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-    GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+    UBlackboardComponent *BB = GetBlackboardComponent();
+    if (!BB) {
+        return;
+    }
+
+    BB->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+    BB->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
     
 }
 
