@@ -35,15 +35,6 @@ void UInteractionComponent::BeginPlay()
 }
 
 
-// Called every frame
-void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-
 void UInteractionComponent::TriggerInteraction()
 {
 	ATannyCharacter *Owner = Cast<ATannyCharacter>(GetOwner());
