@@ -21,7 +21,8 @@ void AEnermyAIController::BeginPlay()
 
     RunBehaviorTree(AIBehavior);
 
-    APawn *PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
     GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
     GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
     
@@ -36,7 +37,6 @@ void AEnermyAIController::Tick(float DeltaSeconds)
         return;
     }
 
-    APawn *PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     if(LineOfSightTo(PlayerPawn)){
         BB->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
         BB->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());

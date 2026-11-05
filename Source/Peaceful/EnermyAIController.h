@@ -23,5 +23,8 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* AIBehavior;
+
+	UPROPERTY()
+	APawn *PlayerPawn = nullptr;
 	
 };
