@@ -7,6 +7,7 @@
 #include "TannyCharacter.generated.h"
 
 class UCoverComponent;
+class UInteractionComponent;
 
 UCLASS()
 class PEACEFUL_API ATannyCharacter : public ACharacter
@@ -33,6 +34,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UCoverComponent *CoverComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UInteractionComponent *InteractionComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TMap<FName, int32> KeyInventory;
@@ -63,7 +67,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ReachRange = 0.f;
 
-	void InteractionTrigger();
 	FHitResult GetFirstPhysicsBodyInReach() const;
 	FVector GetPlayersReach() const;
 	FVector GetPlayersWorldPos() const;
