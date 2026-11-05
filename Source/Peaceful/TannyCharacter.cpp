@@ -73,8 +73,7 @@ void ATannyCharacter::MoveForward(float AxisValue)
 	if(isRun){
 		AddMovementInput(GetActorForwardVector()*AxisValue);
 	}else{
-		AxisValue = AxisValue/2;
-		AddMovementInput(GetActorForwardVector()*AxisValue);
+		AddMovementInput(GetActorForwardVector()*(AxisValue/2));
 	}
 }
 
@@ -87,8 +86,7 @@ void ATannyCharacter::MoveRight(float AxisValue)
 	if(isRun){
 		AddMovementInput(GetActorRightVector()*AxisValue);
 	}else{
-		AxisValue = AxisValue/2;
-		AddMovementInput(GetActorRightVector()*AxisValue);	
+		AddMovementInput(GetActorRightVector()*(AxisValue/2));	
 	}
 }
 
