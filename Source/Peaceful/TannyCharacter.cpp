@@ -16,7 +16,7 @@
 ATannyCharacter::ATannyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	CoverComponent = CreateDefaultSubobject<UCoverComponent>(TEXT("CoverComponent"));
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
@@ -28,21 +28,6 @@ void ATannyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void ATannyCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
-
-	FVector LineTraceEnd = PlayerViewPointLocation+PlayerViewPointRotation.Vector()*ReachRange;
-
-	// DrawDebugLine(GetWorld(), PlayerViewPointLocation, LineTraceEnd, FColor(255, 0, 0), false, -1.f, 0, 5.f);
 }
 
 // Called to bind functionality to input
