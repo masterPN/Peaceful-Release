@@ -6,6 +6,8 @@
 #include "Engine/World.h"
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/PlayerController.h"
+#include "Math/MathFwd.h"
+#include "Math/UnrealMathUtility.h"
 #include "TannyCharacter.h"
 
 
@@ -65,6 +67,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (bIsAnimating) {
+		StepAnimation(DeltaTime);
+	}
+
 	isActorObstruct = false;
 
 	if(!OpenArea){
@@ -80,11 +86,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		if(Actor->GetName() == "BP_TannyCharacter_C_0"){
 			isActorObstruct = true;
 			if(GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E) && IsLock==false){
-				OpenDoor(DeltaTime);
+				StartAnimating(true);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 				isOpening = true;
 			}else if(isOpening){
-				OpenDoor(DeltaTime);
+				StartAnimating(true);
 				DoorLastOpened = GetWorld()->GetTimeSeconds();
 			}
 		}
@@ -93,41 +99,9 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// no actor obstruct door, close it
 	if(!isActorObstruct){
 		if(GetWorld()->GetTimeSeconds()-DoorLastOpened>DoorCloseDelay){
-			CloseDoor(DeltaTime);
+			StartAnimating(false);
 			isOpening = false;
 		}
-	}
-}
-
-void UOpenDoor::OpenDoor(float DeltaTime){
-	CurrentYaw = FMath::Lerp(CurrentYaw, OpenAngle, DeltaTime*DoorOpenSpeed);
-	FRotator DoorRotation = GetOwner()->GetActorRotation();
-	DoorRotation.Yaw = CurrentYaw;
-	GetOwner()->SetActorRotation(DoorRotation);
-
-	CloseDoorSound = false;
-	if(!DoorOpenAudioComponent){
-		return;
-	}
-	if(!OpenDoorSound){
-		DoorOpenAudioComponent->Play();
-		OpenDoorSound = true;
-	}
-}
-
-void UOpenDoor::CloseDoor(float DeltaTime){
-	CurrentYaw = FMath::Lerp(CurrentYaw, InitYaw, DeltaTime*DoorCloseSpeed);
-	FRotator DoorRotation = GetOwner()->GetActorRotation();
-	DoorRotation.Yaw = CurrentYaw;
-	GetOwner()->SetActorRotation(DoorRotation);
-
-	OpenDoorSound = false;
-	if(!DoorCloseAudioComponent){
-		return;
-	}
-	if(!CloseDoorSound){
-		DoorCloseAudioComponent->Play();
-		CloseDoorSound = true;
 	}
 }
 
@@ -158,6 +132,24 @@ void UOpenDoor::StartAnimating(bool bOpen)
 		if (DoorCloseAudioComponent && !CloseDoorSound) {
 			DoorCloseAudioComponent->Play();
 			CloseDoorSound = true;
+		}
+	}
+}
+
+void UOpenDoor::StepAnimation(float DeltaTime)
+{
+	const float Target = bOpenTarget ? OpenAngle : InitYaw;
+	const float Speed = bOpenTarget ? DoorOpenSpeed : DoorCloseSpeed;
+
+	CurrentYaw = FMath::Lerp(CurrentYaw, Target, DeltaTime*Speed);
+	FRotator DoorRotation = GetOwner()->GetActorRotation();
+	DoorRotation.Yaw = CurrentYaw;
+	GetOwner()->SetActorRotation(DoorRotation);
+
+	if (FMath::IsNearlyEqual(CurrentYaw, Target, .5f)) {
+		bIsAnimating = false;
+		if (!bOpenTarget) {
+			SetComponentTickEnabled(false);
 		}
 	}
 }

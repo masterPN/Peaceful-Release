@@ -26,9 +26,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	void OpenDoor(float DeltaTime);
-	void CloseDoor(float DeltaTime);
 
 	void FindPressurePlate();
 	void FindAudioComp();
@@ -85,5 +82,7 @@ private:
 	UAudioComponent* DoorCloseAudioComponent = nullptr;
 
 	void StartAnimating(bool bOpen);
+
+	void StepAnimation(float DeltaTime);
 		
 };
